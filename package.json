@@ -6,16 +6,47 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepare": "husky",
+    "commitlint": "commitlint --edit",
+    "cz": "czg",
+    "commit": "git add . && czg && git push",
+    "release": "release-it"
+  },
+  "lint-staged": {
+    "*.{tsx}": "eslint"
   },
   "dependencies": {
     "vue": "^3.5.13"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.6.0",
+    "@commitlint/config-conventional": "^19.6.0",
+    "@release-it/conventional-changelog": "^8.0.2",
+    "@types/node": "^20",
+    "@typescript-eslint/eslint-plugin": "^8.29.1",
+    "@typescript-eslint/parser": "^8.29.1",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/tsconfig": "^0.7.0",
+    "axios-mock-adapter": "^2.1.0",
+    "babel-plugin-import": "^1.13.8",
+    "czg": "^1.11.0",
+    "eslint": "^9.24.0",
+    "eslint-config-next": "15.0.3",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.2.6",
+    "eslint-plugin-vue": "^10.0.0",
+    "husky": "^9.1.7",
+    "less": "^4.3.0",
+    "less-loader": "^12.2.0",
+    "lint-staged": "^15.5.1",
+    "mockjs": "^1.1.0",
+    "postcss": "^8",
+    "prettier": "^3.5.3",
+    "release-it": "^17.6.0",
     "typescript": "~5.7.2",
     "vite": "^6.2.0",
+    "vite-plugin-mock": "^3.0.2",
     "vue-tsc": "^2.2.4"
   }
 }
