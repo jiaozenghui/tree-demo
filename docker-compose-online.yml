@@ -1,7 +1,7 @@
 version: "3"
 services:
   tree-demo-ui:
-    image: crpi-yacuoj1e11qkasck.cn-beijing.personal.cr.aliyuncs.com/jiaozenghui/tree-demo-ui:{{tag}}
+    image: crpi-yacuoj1e11qkasck.cn-beijing.personal.cr.aliyuncs.com/jiaozenghui/tree-demo:{{tag}}
     container_name: tree-demo-ui
     networks:
       - blog_net
