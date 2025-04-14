@@ -8,6 +8,6 @@ import { Get } from "./../utils/http";
  */
 export const TreeApi = {
   getTreeNodes: <T>(data = {}): ApiResponse<T> => {
-    return Get("/api/treeDatas", data);
+    return Get<T>("/api/treeDatas", data);
   },
 };

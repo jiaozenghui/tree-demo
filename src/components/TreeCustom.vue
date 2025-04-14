@@ -186,19 +186,6 @@ const mergeNodes = (sourceKey: string, targetKey: string | number) => {
   removeNode(data, sourceKey);
   state.gData = data;
 };
-const modifyNode = (key, newTitle, data) => {
-  function findAndModify(nodes) {
-    for (let i = 0; i < nodes.length; i++) {
-      if (nodes[i].key === key) {
-        nodes[i].title = newTitle;
-        return;
-      } else if (nodes[i].children) {
-        findAndModify(nodes[i].children);
-      }
-    }
-  }
-  findAndModify(data);
-};
 const findNode = (tree: any, key: any): any => {
   for (const node of tree) {
     if (node.key === key) return node;
