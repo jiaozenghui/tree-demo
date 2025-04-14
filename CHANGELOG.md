@@ -1,5 +1,12 @@
 
 
+## [0.0.9](https://github.com/jiaozenghui/tree-demo/compare/v0.0.8...v0.0.9) (2025-04-14)
+
+
+### 🐛问题修复
+
+* 🐛 bug fix ([b6ecd49](https://github.com/jiaozenghui/tree-demo/commit/b6ecd4963157fd5734f4ad4d83137de836355c57))
+
 ## [0.0.8](https://github.com/jiaozenghui/tree-demo/compare/v0.0.7...v0.0.8) (2025-04-14)
 
 
