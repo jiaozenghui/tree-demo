@@ -10,3 +10,7 @@ npm dev
 npm run release  
 
 打tag v***后会自动触发构建流程
+
+#线上访问地址
+
+http://workshare.asia:8899/
