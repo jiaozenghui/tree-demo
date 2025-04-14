@@ -1,5 +1,12 @@
 
 
+## [0.0.11](https://github.com/jiaozenghui/tree-demo/compare/v0.0.10...v0.0.11) (2025-04-14)
+
+
+### ✨新功能
+
+* ✨ new build ([d931693](https://github.com/jiaozenghui/tree-demo/commit/d9316935b16f59282d01e306632f21c657b5023f))
+
 ## [0.0.10](https://github.com/jiaozenghui/tree-demo/compare/v0.0.9...v0.0.10) (2025-04-14)
 
 
