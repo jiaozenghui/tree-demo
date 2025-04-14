@@ -54,7 +54,7 @@ const gData = [
 
 export default [
   {
-    url: "/api/utils/treeDatas",
+    url: "/api/utils/list",
     method: "get",
     response: () => {
       return {
