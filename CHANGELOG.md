@@ -1,5 +1,12 @@
 
 
+## [0.0.8](https://github.com/jiaozenghui/tree-demo/compare/v0.0.7...v0.0.8) (2025-04-14)
+
+
+### 🐛问题修复
+
+* 🐛 interface change ([0f4b5dd](https://github.com/jiaozenghui/tree-demo/commit/0f4b5dd82859601ba6dea4b2498b0730a30b498d))
+
 ## [0.0.7](https://github.com/jiaozenghui/tree-demo/compare/v0.0.6...v0.0.7) (2025-04-14)
 
 
