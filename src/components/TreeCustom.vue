@@ -7,6 +7,7 @@
     draggable
     @drop="onDrop"
     @dragover="onDragOver"
+    @dragleave="onDragLeave"
     :fieldNames="{ children: 'children', title: 'title', key: 'key' }"
   />
 
@@ -135,7 +136,9 @@ const onDrop = (info: AntTreeNodeDropEvent) => {
   }
   state.gData = data;
 };
-
+const onDragLeave = (info: any) => {
+  mergePopoverVisible.value = false;
+};
 //处理 Hover到节点之上的提示效果
 const onDragOver = (info: any) => {
   let ele = document.getElementsByClassName(
