@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   p-test-ui:
     image: crpi-yacuoj1e11qkasck.cn-beijing.personal.cr.aliyuncs.com/jiaozenghui/p-test-ui:{{tag}}
@@ -6,7 +6,7 @@ services:
     networks:
       - blog_net
     ports:
-      - 8888:80
+      - 8899:80
 networks:
   blog_net:
     name: mynet
