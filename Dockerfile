@@ -1,13 +1,7 @@
-FROM node:20-alpine3.20
-WORKDIR /app
-COPY package.json ./
-RUN npm install --registry https://registry.npmmirror.com/  --legacy-peer-deps
-COPY . .
-RUN npm run build
+FROM nginx:1.21-alpine
 
 COPY /dist /dist
 ADD default.conf /etc/nginx/conf.d/
-
  
 # 暴露80端口
 EXPOSE 80
