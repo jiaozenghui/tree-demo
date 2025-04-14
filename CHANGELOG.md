@@ -1,5 +1,17 @@
 
 
+## [0.0.6](https://github.com/jiaozenghui/tree-demo/compare/v0.0.5...v0.0.6) (2025-04-14)
+
+
+### ✨新功能
+
+* ✨ bug fix ([99d193f](https://github.com/jiaozenghui/tree-demo/commit/99d193fecc9fa748bc49f3388f9e42a4adbd81b2))
+
+
+### 📚文档
+
+* 📚 reademe ([331c858](https://github.com/jiaozenghui/tree-demo/commit/331c8589168dbf7841195c6dd7f93c8464516be9))
+
 ## [0.0.5](https://github.com/jiaozenghui/tree-demo/compare/v0.0.4...v0.0.5) (2025-04-14)
 
 
