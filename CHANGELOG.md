@@ -1,5 +1,12 @@
 
 
+## [0.0.10](https://github.com/jiaozenghui/tree-demo/compare/v0.0.9...v0.0.10) (2025-04-14)
+
+
+### 🔧配置文件
+
+* 🔨 build inline ([9c0fe58](https://github.com/jiaozenghui/tree-demo/commit/9c0fe58b36c36b71db37744906efcdeac37f3d88))
+
 ## [0.0.9](https://github.com/jiaozenghui/tree-demo/compare/v0.0.8...v0.0.9) (2025-04-14)
 
 
