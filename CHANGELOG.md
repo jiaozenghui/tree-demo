@@ -1,5 +1,12 @@
 
 
+## [0.0.2](https://github.com/jiaozenghui/tree-demo/compare/v0.0.1...v0.0.2) (2025-04-14)
+
+
+### 🐛问题修复
+
+* 🐛 deploy port change ([a830473](https://github.com/jiaozenghui/tree-demo/commit/a830473c4d35104e1145cb1201fa8cab34c8dd0a))
+
 ## 0.0.1 (2025-04-14)
 
 
