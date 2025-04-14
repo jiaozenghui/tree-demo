@@ -14,7 +14,7 @@ const loading = ref(true);
 
 const init = async () => {
   const [e, r] = await TreeApi.getTreeNodes<TreeProps["treeData"]>();
-  if (r && r.code === 200) {
+  if (r && r.errno === 0) {
     gData.value = r.data;
   }
   loading.value = false;
