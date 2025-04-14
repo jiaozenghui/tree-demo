@@ -1,5 +1,12 @@
 
 
+## [0.0.4](https://github.com/jiaozenghui/tree-demo/compare/v0.0.3...v0.0.4) (2025-04-14)
+
+
+### 🐛问题修复
+
+* 🐛 ts type error when build ([69d2a83](https://github.com/jiaozenghui/tree-demo/commit/69d2a834fbcbf822186d21a9ec92bd05ca55f482))
+
 ## [0.0.3](https://github.com/jiaozenghui/tree-demo/compare/v0.0.2...v0.0.3) (2025-04-14)
 
 
