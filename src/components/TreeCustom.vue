@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { type CSSProperties, ref, type PropType, reactive } from "vue";
+import { type CSSProperties, ref, type PropType, reactive, watch } from "vue";
 import { message, Tree as ATree } from "ant-design-vue";
 import type {
   AntTreeNodeDropEvent,
@@ -49,6 +49,7 @@ type NodeDragEventParams = {
 type TreeDataItem = TreeProps["treeData"][] & {
   children?: Array<TreeDataItem>;
   key: keyType;
+  expanded: boolean;
 };
 
 type keyType = string | number;
@@ -70,16 +71,16 @@ const popoverStyle = ref<CSSProperties>({
   top: "0",
   zIndex: 9999,
 });
-const popMsg = ref("");
-const Pos = ref("");
-const dropNodeTitle = ref("");
+
 const showLine = ref<boolean>(true);
 const showIcon = ref<boolean>(false);
 
 const expandedKeys = ref<string[]>(["0-0", "0-1"]);
 
+const popMsg = ref("");
 const dragNode = ref<DataNode>();
 const dropNodeKey = ref<keyType>("");
+const IsNodeMerge = ref(false);
 
 /**
  * 拖拽开始的时候记录拖动的节点
@@ -89,15 +90,22 @@ const onDragStart = (info: NodeDragEventParams) => {
   dragNode.value = info.node;
 };
 
-//处理 Hover到节点之上的提示效果,因使用的Event的参数，并不能跟准确的get到要使用的信息，所以使用了Dom
+/**
+ * 处理 Hover到节点之上的提示效果,因使用的Event的参数，并不能跟准确的get到要使用的信息，所以使用了Dom
+ * @param info
+ */
 const onDragOver = (info: NodeDragEventParams) => {
+  Array.from(document?.getElementsByClassName("merge-node")).forEach((item) => {
+    item.classList.remove("merge-node");
+  });
+  IsNodeMerge.value = false;
   let ele = document.getElementsByClassName(
     "ant-tree-drop-indicator"
   )[0] as HTMLElement;
   let rect: DOMRect;
   if (ele) {
     rect = ele.getBoundingClientRect();
-    dropNodeTitle.value =
+    let dropNodeTitle =
       ele.parentElement
         ?.querySelector('[class="keytag"]')
         ?.getAttribute("title") || "";
@@ -108,21 +116,29 @@ const onDragOver = (info: NodeDragEventParams) => {
         ?.getAttribute("idd") || "";
 
     const dropNode = findNode(state.gData, dropNodeKey.value);
-
+    if (!dropNode) return;
     let diffLevel = 0;
     diffLevel = dropNode.level - dragNode?.value?.level;
     let pos = parseInt(ele.style.top) < 0 ? "之上" : "之下";
     console.log(diffLevel);
     if (diffLevel === 0) {
-      popMsg.value =
-        parseInt(ele.style.left) === 28
-          ? `将与【${dropNodeTitle.value}】合并`
-          : `将置于【${dropNodeTitle.value}】${pos}`;
+      if (parseInt(ele.style.left) === 28) {
+        popMsg.value = `将与【${dropNodeTitle}】合并`;
+        ele.parentElement
+          ?.querySelector('[class="keytag"]')
+          ?.classList.add("merge-node");
+        ele.style.height = "0px";
+        ele.style.overflow = "hidden";
+      } else {
+        popMsg.value = `将置于【${dropNodeTitle}】${pos}`;
+      }
     } else if (diffLevel === 1) {
-      popMsg.value =
-        parseInt(ele.style.left) === 28
-          ? `将合入【${dropNodeTitle.value}】的子级`
-          : `不可跨级拖拽`;
+      if (parseInt(ele.style.left) === 28) {
+        IsNodeMerge.value = true;
+        popMsg.value = `将合入【${dropNodeTitle}】的子级`;
+      } else {
+        popMsg.value = `不可将不同层级的节点置于相同的层级`;
+      }
     } else {
       popMsg.value = `不可跨级拖拽`;
     }
@@ -149,10 +165,19 @@ const onDragOver = (info: NodeDragEventParams) => {
 const onDragLeave = () => {
   mergePopoverVisible.value = false;
   dropNodeKey.value = "";
+  Array.from(document?.getElementsByClassName("merge-node")).forEach((item) => {
+    item.classList.remove("merge-node");
+  });
 };
 
-//移动到最终节点
+/**
+ * 移动到最终节点 做与目标节点合并、添加到上方、添加到下方的逻辑
+ * @param info 拖拽最终下放的节点
+ */
 const onDrop = (info: AntTreeNodeDropEvent) => {
+  Array.from(document?.getElementsByClassName("merge-node")).forEach((item) => {
+    item.classList.remove("merge-node");
+  });
   mergePopoverVisible.value = false;
   let node: DataNode = info.node;
   // if (dropNodeKey.value && dropNodeKey.value !== node.key) {
@@ -164,15 +189,12 @@ const onDrop = (info: AntTreeNodeDropEvent) => {
   const dropPos = info?.node?.pos?.split("-");
   const dropPosition =
     dropPos && info.dropPosition - Number(dropPos[dropPos?.length - 1]);
-
-  const dragParent = findParent(state.gData, dragKey);
-  const dropParent = findParent(state.gData, dropKey);
-
   const diffLevel = node.level - dragNode?.value?.level;
-  if (!(diffLevel === 0 || diffLevel === 1)) {
-    // 如果不在同一层级，则不执行拖拽操作或给出提示
+  if (!(diffLevel === 0 || (diffLevel === 1 && IsNodeMerge.value))) {
+    // 目标节点与源节点存在一个级别的差距，则不执行拖拽操作给出提示
     message.error("不能跨层级拖拽");
-    return; // 阻止默认行为，例如阻止重新排序或移动节点到其他父节点下
+    // 阻止默认行为，例如阻止重新排序或移动节点到其他父节点下
+    return;
   }
 
   const loop = (
@@ -325,11 +347,19 @@ const removeNode = (tree: any, key: any) => {
   width: 300px;
   text-align: left;
 }
+.merge-node {
+  background-color: rgb(111, 180, 215);
+}
+.keytag {
+  display: inline-block;
+  width: 100%;
+}
 .pop-div {
   background-color: #1677ff;
   padding: 6px 10px;
   color: #fff;
   text-align: left;
   border-radius: 4px;
+  width: 200px;
 }
 </style>

@@ -84,7 +84,7 @@ describe("TreeCustom Component", () => {
     });
   });
 
-  it("renders list items correctly", () => {
+  it.only("renders list items correctly", () => {
     const treeNodes = wrapper.findAllComponents({ name: "ATreeNode" });
     expect(treeNodes.length).toBe(9);
     expect(wrapper.findComponent(ATree).exists()).toBe(true);
