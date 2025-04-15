@@ -1,5 +1,12 @@
 
 
+## [0.0.16](https://github.com/jiaozenghui/tree-demo/compare/v0.0.15...v0.0.16) (2025-04-15)
+
+
+### ✨新功能
+
+* ✨ drag and drop logic changes ([ebcb1be](https://github.com/jiaozenghui/tree-demo/commit/ebcb1be0735667dc20ecdacdc7d46cc485de7dee))
+
 ## [0.0.15](https://github.com/jiaozenghui/tree-demo/compare/v0.0.14...v0.0.15) (2025-04-15)
 
 
