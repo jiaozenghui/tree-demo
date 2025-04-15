@@ -1,5 +1,12 @@
 
 
+## [0.0.15](https://github.com/jiaozenghui/tree-demo/compare/v0.0.14...v0.0.15) (2025-04-15)
+
+
+### 🐛问题修复
+
+* 🐛 drag and drop logic changes ([6498797](https://github.com/jiaozenghui/tree-demo/commit/64987974909b85739c77b41c078bab34be9f9933))
+
 ## [0.0.14](https://github.com/jiaozenghui/tree-demo/compare/v0.0.13...v0.0.14) (2025-04-15)
 
 
