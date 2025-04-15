@@ -1,5 +1,12 @@
 
 
+## [0.0.14](https://github.com/jiaozenghui/tree-demo/compare/v0.0.13...v0.0.14) (2025-04-15)
+
+
+### 🐛问题修复
+
+* 🐛 can not merge notes correctly ([fd2349d](https://github.com/jiaozenghui/tree-demo/commit/fd2349dc05018e0f788771ab45b29fc6b4a3c33a))
+
 ## [0.0.13](https://github.com/jiaozenghui/tree-demo/compare/v0.0.12...v0.0.13) (2025-04-14)
 
 ## [0.0.12](https://github.com/jiaozenghui/tree-demo/compare/v0.0.11...v0.0.12) (2025-04-14)
