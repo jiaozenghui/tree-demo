@@ -13,4 +13,4 @@ npm run release
 
 #线上访问地址
 
-http://workshare.asia:8899/
+http://workshare.asia:8896/
