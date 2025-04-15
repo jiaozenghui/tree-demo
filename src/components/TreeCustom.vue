@@ -9,7 +9,13 @@
     @dragover="onDragOver"
     @dragleave="onDragLeave"
     :fieldNames="{ children: 'children', title: 'title', key: 'key' }"
-  />
+  >
+    <template #title="{ key: treeKey, title }"
+      ><span class="keytag" :idd="treeKey" :title="title">
+        {{ title }}
+      </span>
+    </template>
+  </a-tree>
 
   <div
     v-if="mergePopoverVisible"
@@ -22,15 +28,19 @@
 </template>
 
 <script setup lang="ts">
-import {
-  type CSSProperties,
-  ref,
-  type PropType,
-  computed,
-  reactive,
-} from "vue";
+import { type CSSProperties, ref, type PropType, reactive } from "vue";
 import { message, Tree as ATree } from "ant-design-vue";
-import type { AntTreeNodeDropEvent, TreeProps } from "ant-design-vue/es/tree";
+import type {
+  AntTreeNodeDropEvent,
+  DataNode,
+  TreeProps,
+  EventDataNode,
+} from "ant-design-vue/es/tree";
+
+type NodeDragEventParams = {
+  event: DragEvent;
+  node: EventDataNode;
+};
 
 type TreeDataItem = TreeProps["treeData"][] & {
   children?: Array<TreeDataItem>;
@@ -62,10 +72,17 @@ const showIcon = ref<boolean>(false);
 
 const expandedKeys = ref<string[]>(["0-0", "0-1"]);
 
+const dropNodeKey = ref("");
+
 //移动到最终节点
 const onDrop = (info: AntTreeNodeDropEvent) => {
   mergePopoverVisible.value = false;
-  const dropKey = info.node.key;
+  let node: DataNode = info.node;
+  if (dropNodeKey.value && dropNodeKey.value !== node.key) {
+    node = findNode(state.gData, dropNodeKey.value);
+  }
+
+  const dropKey = node.key;
   const dragKey = info.dragNode.key;
   const dropPos = info?.node?.pos?.split("-");
   const dropPosition =
@@ -74,7 +91,7 @@ const onDrop = (info: AntTreeNodeDropEvent) => {
   const dragParent = findParent(state.gData, dragKey);
   const dropParent = findParent(state.gData, dropKey);
 
-  if (dragParent?.key !== dropParent?.key) {
+  if (dragParent?.level !== dropParent?.level) {
     // 如果不在同一层级，则不执行拖拽操作或给出提示
     message.error("不能跨层级拖拽");
     return; // 阻止默认行为，例如阻止重新排序或移动节点到其他父节点下
@@ -109,14 +126,17 @@ const onDrop = (info: AntTreeNodeDropEvent) => {
   );
   if (!info.dropToGap) {
     // Drop on the content
-    mergeNodes(dragObj.key, dropKey);
+    mergeNodes(dragObj, dropKey);
   } else if (
-    (info.node.children || []).length > 0 && // Has children
-    info.node.expanded && // Is expanded
+    (node.children || []).length > 0 && // Has children
+    node.expanded && // Is expanded
     dropPosition === 1 // On the bottom gap
   ) {
-    message.error("不能跨层级拖拽");
-    return;
+    loop(data, dropKey, (item: TreeDataItem) => {
+      item.children = item.children || [];
+      // where to insert 示例添加到头部，可以是随意位置
+      item.children.push(dragObj);
+    });
   } else {
     let ar: TreeProps["treeData"] = [];
     let i = 0;
@@ -136,19 +156,24 @@ const onDrop = (info: AntTreeNodeDropEvent) => {
   }
   state.gData = data;
 };
-const onDragLeave = (info: any) => {
-  mergePopoverVisible.value = false;
-};
-//处理 Hover到节点之上的提示效果
-const onDragOver = (info: any) => {
+
+//处理 Hover到节点之上的提示效果,因使用的Event的参数，并不能跟准确的get到要使用的信息，所以使用了Dom
+const onDragOver = (info: NodeDragEventParams) => {
   let ele = document.getElementsByClassName(
     "ant-tree-drop-indicator"
   )[0] as HTMLElement;
   let rect: DOMRect;
   if (ele) {
     rect = ele.getBoundingClientRect();
-    dropNodeTitle.value = info.node.title;
+    dropNodeTitle.value =
+      ele.parentElement
+        ?.querySelector('[class="keytag"]')
+        ?.getAttribute("title") || "";
 
+    dropNodeKey.value =
+      ele.parentElement
+        ?.querySelector('[class="keytag"]')
+        ?.getAttribute("idd") || "";
     Pos.value = parseInt(ele.style.top) < 0 ? "之上" : "之下";
     popMsg.value =
       parseInt(ele.style.left) === 28
@@ -170,9 +195,16 @@ const onDragOver = (info: any) => {
   }
 };
 
-const mergeNodes = (sourceKey: string, targetKey: string | number) => {
+//鼠标离开，移除提示框
+const onDragLeave = () => {
+  mergePopoverVisible.value = false;
+  dropNodeKey.value = "";
+};
+
+//处理合并节点的逻辑函数
+const mergeNodes = (sourceNode: DataNode, targetKey: string | number) => {
   const data = [...(state.gData ? state.gData : [])];
-  const sourceNode = findNode(data, sourceKey);
+  //const sourceNode = findNode(data, sourceKey);
   const targetNode = findNode(data, targetKey);
 
   targetNode.title = `${targetNode.title} + ${sourceNode.title}`;
@@ -186,9 +218,15 @@ const mergeNodes = (sourceKey: string, targetKey: string | number) => {
   }
   //modifyNode(targetKey, targetNode.title, data);
   // 移除源节点
-  removeNode(data, sourceKey);
+  removeNode(data, sourceNode.key);
   state.gData = data;
 };
+
+/**
+ * 根据key查找到对应的节点
+ * @param tree 树结构数据
+ * @param key 节点在树中的唯一键
+ */
 const findNode = (tree: any, key: any): any => {
   for (const node of tree) {
     if (node.key === key) return node;
@@ -200,6 +238,12 @@ const findNode = (tree: any, key: any): any => {
   return null;
 };
 
+/**
+ * 根据Key 查找到其上级父节点
+ * @param tree 树结构数据
+ * @param key 节点在树中的唯一键
+ * @param parent 父节点
+ */
 const findParent = (tree: any, key: any, parent = null): any => {
   for (const node of tree) {
     if (node.key === key) return parent;
@@ -211,6 +255,11 @@ const findParent = (tree: any, key: any, parent = null): any => {
   return null;
 };
 
+/**
+ *根据Key移除对应节点
+ * @param tree 树结构数据
+ * @param key 节点在树中的唯一键
+ */
 const removeNode = (tree: any, key: any) => {
   const index = tree.findIndex((node: any) => node.key === key);
   if (index >= 0) {
