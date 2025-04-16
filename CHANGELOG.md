@@ -1,5 +1,17 @@
 
 
+## [1.0.2](https://github.com/jiaozenghui/tree-demo/compare/v1.0.1...v1.0.2) (2025-04-16)
+
+
+### 🐛问题修复
+
+* 🐛 drag bug fix   when drag to unvalid level ([9b2de21](https://github.com/jiaozenghui/tree-demo/commit/9b2de2145e29e8f20ddf3da68e17297162832b55))
+
+
+### 📚文档
+
+* 📚 readme.md changes ([09ace17](https://github.com/jiaozenghui/tree-demo/commit/09ace17ed375ac4113c38bd3f5a3faa421e0116a))
+
 ## [1.0.1](https://github.com/jiaozenghui/tree-demo/compare/v1.0.0...v1.0.1) (2025-04-15)
 
 
