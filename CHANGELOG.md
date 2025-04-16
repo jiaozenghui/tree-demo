@@ -1,5 +1,13 @@
 
 
+## [1.0.4](https://github.com/jiaozenghui/tree-demo/compare/v1.0.3...v1.0.4) (2025-04-16)
+
+
+### ✨新功能
+
+* ✨ add confirm shen drop ([60833ff](https://github.com/jiaozenghui/tree-demo/commit/60833ff928912d8662c9fdb8f9988b55a4e46f32))
+* ✨ drop confirm ([9dff314](https://github.com/jiaozenghui/tree-demo/commit/9dff314e6bf93f2250841ad99ad2eb3f1c7d8ee5))
+
 ## [1.0.3](https://github.com/jiaozenghui/tree-demo/compare/v1.0.2...v1.0.3) (2025-04-16)
 
 ## [1.0.2](https://github.com/jiaozenghui/tree-demo/compare/v1.0.1...v1.0.2) (2025-04-16)
