@@ -130,7 +130,11 @@ const onDragOver = (info: NodeDragEventParams) => {
         ele.style.height = "0px";
         ele.style.overflow = "hidden";
       } else {
-        popMsg.value = `将置于【${dropNodeTitle}】${pos}`;
+        if (parseInt(ele.style.left) === -20) {
+          popMsg.value = `不可将不同层级的节点置于相同的层级`;
+        } else {
+          popMsg.value = `将置于【${dropNodeTitle}】${pos}`;
+        }
       }
     } else if (diffLevel === 1) {
       if (parseInt(ele.style.left) === 28) {
