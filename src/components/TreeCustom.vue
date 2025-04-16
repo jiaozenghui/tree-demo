@@ -87,6 +87,7 @@ const IsNodeMerge = ref(false);
  * @param info 拖拽源节点Info
  */
 const onDragStart = (info: NodeDragEventParams) => {
+  console.log(info.node);
   dragNode.value = info.node;
 };
 
@@ -120,7 +121,6 @@ const onDragOver = (info: NodeDragEventParams) => {
     let diffLevel = 0;
     diffLevel = dropNode.level - dragNode?.value?.level;
     let pos = parseInt(ele.style.top) < 0 ? "之上" : "之下";
-    console.log(diffLevel);
     if (diffLevel === 0) {
       if (parseInt(ele.style.left) === 28) {
         popMsg.value = `将与【${dropNodeTitle}】合并`;

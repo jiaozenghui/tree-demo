@@ -22,54 +22,120 @@ const data = [
   {
     title: "0-0",
     key: "0-0",
+    level: 1,
     children: [
       {
         title: "0-0-0",
         key: "0-0-0",
+        level: 0,
         children: [
-          { title: "0-0-0-0", key: "0-0-0-0" },
-          { title: "0-0-0-1", key: "0-0-0-1" },
-          { title: "0-0-0-2", key: "0-0-0-2" },
+          {
+            title: "0-0-0-0",
+            key: "0-0-0-0",
+            level: -1,
+          },
+          {
+            title: "0-0-0-1",
+            key: "0-0-0-1",
+            level: -1,
+          },
+          {
+            title: "0-0-0-2",
+            key: "0-0-0-2",
+            level: -1,
+          },
         ],
       },
       {
         title: "0-0-1",
         key: "0-0-1",
+        level: 0,
         children: [
-          { title: "0-0-1-0", key: "0-0-1-0" },
-          { title: "0-0-1-1", key: "0-0-1-1" },
-          { title: "0-0-1-2", key: "0-0-1-2" },
+          {
+            title: "0-0-1-0",
+            key: "0-0-1-0",
+            level: -1,
+          },
+          {
+            title: "0-0-1-1",
+            key: "0-0-1-1",
+            level: -1,
+          },
+          {
+            title: "0-0-1-2",
+            key: "0-0-1-2",
+            level: -1,
+          },
         ],
       },
-      { title: "0-0-2", key: "0-0-2" },
+      {
+        title: "0-0-2",
+        key: "0-0-2",
+        level: 0,
+      },
     ],
   },
   {
     title: "0-1",
     key: "0-1",
+    level: 1,
     children: [
       {
         title: "0-1-0",
         key: "0-1-0",
+        level: 0,
         children: [
-          { title: "0-1-0-0", key: "0-1-0-0" },
-          { title: "0-1-0-1", key: "0-1-0-1" },
-          { title: "0-1-0-2", key: "0-1-0-2" },
+          {
+            title: "0-1-0-0",
+            key: "0-1-0-0",
+            level: -1,
+          },
+          {
+            title: "0-1-0-1",
+            key: "0-1-0-1",
+            level: -1,
+          },
+          {
+            title: "0-1-0-2",
+            key: "0-1-0-2",
+            level: -1,
+          },
         ],
       },
       {
         title: "0-1-1",
         key: "0-1-1",
+        level: 0,
         children: [
-          { title: "0-1-1-0", key: "0-1-1-0" },
-          { title: "0-1-1-1", key: "0-1-1-1" },
-          { title: "0-1-1-2", key: "0-1-1-2" },
+          {
+            title: "0-1-1-0",
+            key: "0-1-1-0",
+            level: -1,
+          },
+          {
+            title: "0-1-1-1",
+            key: "0-1-1-1",
+            level: -1,
+          },
+          {
+            title: "0-1-1-2",
+            key: "0-1-1-2",
+            level: -1,
+          },
         ],
       },
-      { title: "0-1-2", key: "0-1-2" },
+      {
+        title: "0-1-2",
+        key: "0-1-2",
+        level: 0,
+      },
     ],
   },
-  { title: "0-2", key: "0-2" },
+  {
+    title: "0-2",
+    key: "0-2",
+    level: 1,
+  },
 ];
 
 describe("TreeCustom Component", () => {
@@ -91,15 +157,25 @@ describe("TreeCustom Component", () => {
     expect(wrapper.findComponent(ATree).props("draggable")).toBe(true);
   });
 
-  it("handles drop events correctly", async () => {
-    const wrapper = mount(TreeCustom, {
-      global: {
-        components: {
-          "a-tree": ATree,
-        },
-      },
-    });
+  it.only("handles dragover events correctly", async () => {
+    const tree = wrapper.findComponent(ATree);
 
+    // 模拟拖拽事件数据
+    const mockEvent = {
+      node: {
+        key: "0-2", // 拖拽的节点
+      },
+    };
+
+    // 触发 drop 事件
+    await tree.trigger("dragstart", mockEvent);
+    await wrapper.vm.$nextTick();
+    // 验证事件是否触发
+    expect(wrapper.emitted("dragstart")).toBeTruthy();
+    expect(wrapper.vm.dragNode.value).toEqual(mockEvent);
+  });
+
+  it("handles drop events correctly", async () => {
     const tree = wrapper.findComponent(ATree);
 
     // 模拟拖拽事件数据
