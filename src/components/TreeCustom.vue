@@ -32,8 +32,16 @@
 </template>
 
 <script setup lang="ts">
-import { type CSSProperties, ref, type PropType, reactive, watch } from "vue";
-import { message, Tree as ATree } from "ant-design-vue";
+import {
+  type CSSProperties,
+  ref,
+  type PropType,
+  reactive,
+  createVNode,
+} from "vue";
+import { message, Tree as ATree, Modal } from "ant-design-vue";
+import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
+import { cloneDeep } from "lodash-es";
 import type {
   AntTreeNodeDropEvent,
   DataNode,
@@ -87,7 +95,6 @@ const IsNodeMerge = ref(false);
  * @param info 拖拽源节点Info
  */
 const onDragStart = (info: NodeDragEventParams) => {
-  console.log(info.node);
   dragNode.value = info.node;
 };
 
@@ -179,6 +186,7 @@ const onDragLeave = () => {
  * @param info 拖拽最终下放的节点
  */
 const onDrop = (info: AntTreeNodeDropEvent) => {
+  const oldData = cloneDeep(state.gData);
   Array.from(document?.getElementsByClassName("merge-node")).forEach((item) => {
     item.classList.remove("merge-node");
   });
@@ -217,7 +225,6 @@ const onDrop = (info: AntTreeNodeDropEvent) => {
       });
   };
   const data = [...(state.gData ? state.gData : [])];
-
   // Find dragObject
   let dragObj: TreeDataItem = <any>{};
   loop(
@@ -231,7 +238,8 @@ const onDrop = (info: AntTreeNodeDropEvent) => {
   if (!info.dropToGap) {
     // Drop on the content
     if (diffLevel == 0) {
-      mergeNodes(dragObj, dropKey);
+      showConfirm(dragObj, dropKey, data, oldData);
+      //mergeNodes();
     } else if (diffLevel == 1) {
       loop(data, dropKey, (item: TreeDataItem) => {
         item.children = item.children || [];
@@ -249,6 +257,7 @@ const onDrop = (info: AntTreeNodeDropEvent) => {
       // where to insert 示例添加到头部，可以是随意位置
       item.children.push(dragObj);
     });
+    state.gData = data;
   } else {
     let ar: TreeProps["treeData"] = [];
     let i = 0;
@@ -265,8 +274,8 @@ const onDrop = (info: AntTreeNodeDropEvent) => {
     } else {
       ar.splice(i + 1, 0, dragObj);
     }
+    state.gData = data;
   }
-  state.gData = data;
 };
 
 /**
@@ -280,7 +289,7 @@ const mergeNodes = (sourceNode: DataNode, targetKey: string | number) => {
   const targetNode = findNode(data, targetKey);
 
   targetNode.title = `${targetNode.title} + ${sourceNode.title}`;
-
+  targetNode.expanded = true;
   // 如果目标节点有children，把源节点的children合并过去
   if (sourceNode.children && sourceNode.children.length > 0) {
     targetNode.children = [
@@ -344,6 +353,33 @@ const removeNode = (tree: any, key: any) => {
     }
   }
   return false;
+};
+
+const showConfirm = (
+  dragNode: DataNode,
+  dropKey: string | number,
+  data: TreeProps["treeData"],
+  oldData: TreeProps["treeData"]
+) => {
+  Modal.confirm({
+    title: "请确认合并节点吗？",
+    icon: createVNode(ExclamationCircleOutlined),
+    okText: "确认",
+    cancelText: "取消",
+    content: createVNode(
+      "div",
+      {},
+      `节点${dragNode.title}将与节点${dropKey} 合并`
+    ),
+    onOk() {
+      mergeNodes(dragNode, dropKey);
+      state.gData = data;
+    },
+    onCancel() {
+      state.gData = oldData;
+    },
+    class: "test",
+  });
 };
 </script>
 <style lang="less" scoped>
